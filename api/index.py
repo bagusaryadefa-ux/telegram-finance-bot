@@ -8,9 +8,14 @@ app = FastAPI()
 async def root():
     return {"message": "Bot is running"}
 
-@app.post(f"/{TELEGRAM_TOKEN}")
-async def handle_telegram_update(request: Request):
-    update = await request.json()
-    # Process update directly (synchronous-safe in Vercel serverless)
-    await process_update(update)
+@app.post("/")
+@app.post("/webhook")
+@app.post("/{full_path:path}")
+async def handle_telegram_update(request: Request, full_path: str = ""):
+    try:
+        update = await request.json()
+        print(f"Received update: {update}")
+        await process_update(update)
+    except Exception as e:
+        print(f"Error processing update: {e}")
     return {"ok": True}

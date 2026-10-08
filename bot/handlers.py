@@ -57,7 +57,7 @@ async def process_update(update: dict):
         chat_id = message["chat"]["id"]
         # Security Check
         if chat_id != ALLOWED_USER_ID:
-            # Silently ignore unauthorized users
+            print(f"[SECURITY] Ignored message from chat_id {chat_id}. Expected ALLOWED_USER_ID: {ALLOWED_USER_ID}")
             return
 
         text = message.get("text", "").strip()
